@@ -1,0 +1,57 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Reddit Sentiment Analysis</title>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <h1>Reddit Sentiment Analysis</h1>
+            </div>
+            <div class="navbar-right">
+                <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            </div>
+        </nav>
+    </header>
+	
+    <div class="container">
+        <div class="row">
+            <div class="chart-section">
+                <h2>Pie Chart</h2> <br/>
+                <img src="{{ url_for('static', filename=pie_chart) }}" alt="Pie Chart">
+            </div>
+
+            <div class="word-cloud-section">
+                <h2>Word Cloud</h2> <br/>
+                <img src="{{ url_for('static', filename=word_cloud) }}" alt="Word Cloud">
+            </div> 
+        </div>
+
+        <div class="row">
+            <div class="keyword-frequency-section">
+                <h2>Keyword Frequency</h2> <br/>
+                <ul>
+                    <!-- Display keyword frequency data here -->
+                    {% for keyword in keyword_freq %}
+                    <li><b>{{ keyword[0] }}</b> : {{ keyword[1] }}</li>
+                    {% endfor %}
+                    <!-- Add more items as needed -->
+                </ul>
+            </div>
+                
+            <div class="sentiment-score-section">
+                <h2>Sentiment Score</h2> <br/>
+                <p id="sentiment-score">{{ overall_sentiment }}</p>
+            </div>
+                
+            <div class="confidence-level-section">
+                <h2>Confidence Level</h2> <br/>
+                <p id="confidence-level">{{ confidence_level }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

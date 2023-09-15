@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Home</title>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <h1>Reddit Sentiment Analysis</h1>
+            </div>
+            <div class="navbar-right">
+                <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="form">
+            <h1>Analyse</h1> <br/>
+            <form method="post" action="{{ url_for('home') }}">
+                <label for="keyword">Enter a keyword:</label>
+                <input type="text" id="keyword" name="keyword" required>
+
+                <label for="numberOfComments">Enter a number for comments to analyze:</label>
+                <input type="number" id="comments" name="comments" required>
+
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
