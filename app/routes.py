@@ -32,7 +32,7 @@ def login():
         user = Users.query.filter_by(email=email).first()
 
         if user:
-            if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+            if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                 session['email'] = user.email
                 session['username'] = user.username
                 return redirect(url_for('home'))

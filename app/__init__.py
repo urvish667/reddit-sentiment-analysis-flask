@@ -1,18 +1,17 @@
+import os
 from flask import Flask
-from flask_mysqldb import MySQL
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
 app.secret_key = "IAMSAFSU"
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'urvish'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'tweeter'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://urvish:root@localhost/tweeter'
+db_username = os.environ['MYSQL_USER']
+db_password = os.environ['MYSQL_PASSWORD']
+db_name = os.environ['MYSQL_DATABASE']
+db_hostname = os.environ['MYSQL_HOSTNAME']
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{0}:{1}@{2}/{3}'.format(db_username, db_password, db_hostname, db_name)
 
 db = SQLAlchemy(app)
-mysql = MySQL(app)
 
 from app import routes

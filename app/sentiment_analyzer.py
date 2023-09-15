@@ -21,9 +21,10 @@ class RedditSentimentAnalysis:
 
     def download_data(self, subreddit_name, num_comments):
         # Authenticating
-        client_id = 'client-id'
-        client_secret = 'client-secret'
-        user_agent = 'user-agent'
+        client_id = os.environ['CLIENT_ID']
+        client_secret = os.environ['CLIENT_SECRET']
+        user_agent = os.environ['USER_AGENT']
+
         reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, user_agent=user_agent)
 
         # Convert num_comments to an integer (with data type check)
