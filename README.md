@@ -14,7 +14,7 @@ Analyze Reddit comments' sentiment with ease using this Docker container. Extrac
 To run the container, use the following command:
 
 ```shell
-docker run -dit --name reddit-sentiment -p 5000:5000 -e MYSQL_USER=reddit -e MYSQL_PASSWORD=reddit -e MYSQL_DATABASE=reddit_db -e MYSQL_HOSTNAME=172.17.0.2 -e CLIENT_ID=AfMfyP_bby_lttF74XqCLA -e CLIENT_SECRET=UGkXEyJAyL4JFNiwmtX83ReyacoOTg -e USER_AGENT='SentimentalAnalysis/1.0 by urvish667' reddit-sentiment-analysis
+docker run -dit --name reddit-sentiment -p 5000:5000 -e MYSQL_USER=reddit -e MYSQL_PASSWORD=reddit -e MYSQL_DATABASE=reddit_db -e MYSQL_HOSTNAME=172.17.0.2 -e CLIENT_ID=AfMfyP_bby_lttF74XqCLA -e CLIENT_SECRET=UGkXEyJAyL4JFNiwmtX83ReyacoOTg -e USER_AGENT='<app-name>/<version> by <reddit-username>' reddit-sentiment-analysis
 ```
 
 Ensure you've set all the required environment variables for Reddit API integration.
