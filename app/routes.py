@@ -1,8 +1,8 @@
 from flask import render_template, redirect, request, url_for, session, flash
 import bcrypt
-from app import app, mysql
+from app import app, db
 from app import sentiment_analyzer as sa
-import MySQLdb
+from app.models import Users
 
 # Route for the main page or login page
 @app.route('/')
@@ -29,27 +29,19 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        conn = mysql.connection
-        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
-
-        # Check if the user with the provided email exists in the database
-        cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
-        user = cursor.fetchone()
+        user = Users.query.filter_by(email=email).first()
 
         if user:
-            # Verify if the entered password matches the hashed password stored in the database
             if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-                session['email'] = user['email']  # Store the user's email in the session
-                session['username'] = user['username'] # Store the user's name in the session
-                return redirect(url_for('home'))  # Redirect to the home page upon successful login
+                session['email'] = user.email
+                session['username'] = user.username
+                return redirect(url_for('home'))
             else:
                 msg = 'Password did not match. Please enter the correct password.'
-                return render_template('login.html', msg=msg)  # Display an error message
         else:
             msg = 'User does not exist. Please create an account.'
-            return render_template('login.html', msg=msg)  # Display a message to create an account
 
-    return render_template('login.html')  # Display the login form
+    return render_template('login.html', msg=msg)
 
 # Route for registration/sign-up page
 @app.route('/register', methods=['GET', 'POST'])
@@ -77,30 +69,21 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        conn = mysql.connection
-        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
-
-        # Check if a user with the provided email already exists in the database
-        cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
-        user = cursor.fetchone()
+        user = Users.query.filter_by(email=email).first()
 
         if user:
             msg = 'User already exists. Please try to log in.'
         else:
-            # Hash the password before storing it in the database
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
-            # Insert the new user into the 'users' table
-            cursor.execute('INSERT INTO users (username, password, email) VALUES (%s, %s, %s)', (username, hashed_password, email))
-            conn.commit()
-            session['email'] = email  # Store the user's email in the session
-            session['username'] = username # Store the user's name in the session
-
-            # Flash a success message and redirect to the home page upon successful registration
+            hashed_password =  bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            new_user = Users(username=username, email=email, password=hashed_password)
+            db.session.add(new_user)
+            db.session.commit()
+            session['email'] = email
+            session['username'] = username
             flash('Registration successful!', 'success')
             return redirect(url_for('home'))
-        
-    return render_template('register.html', msg=msg)  # Display the registration form
+
+    return render_template('register.html', msg=msg)
 
 # Route for the home page
 @app.route('/home', methods=["GET", "POST"])
