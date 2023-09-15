@@ -1,4 +1,4 @@
-# Reddit Sentiment Analysis Docker
+# Reddit Sentiment Analysis
 
 Analyze Reddit comments' sentiment with ease using this Docker container. Extract valuable insights from Reddit discussions effortlessly.
 
